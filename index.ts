@@ -3,7 +3,7 @@ import cors from "cors";
 import projectRouter from "./routes/project";
 import clusterRouter from "./routes/cluster";
 import documentRouter from "./routes/document";
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 import { ParamsDictionary } from "express-serve-static-core";
 
 export interface ClusterReqParams extends ParamsDictionary {

@@ -7,8 +7,12 @@ router.get("/:dir", (req, res) => {
   try {
     const { dir } = req.params;
     if (typeof dir !== "string") return res.status(400).json("Invalid file");
-    const rawData = fs.readdirSync(`./data/${dir}`, { encoding: "utf-8" });
-    return res.status(200).json(rawData);
+    try {
+      const rawData = fs.readdirSync(`./data/${dir}`, { encoding: "utf-8" });
+      return res.status(200).json(rawData);
+    } catch {
+      return res.status(200).json(null);
+    }
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ message: err?.message });
@@ -31,8 +35,12 @@ router.delete("/:dir", (req, res) => {
   try {
     const { dir } = req.params;
     if (typeof dir !== "string") return res.status(400).json("Invalid file");
-    fs.rmSync(`./data/${dir}`, { recursive: true });
-    return res.status(202).json("Success");
+    try {
+      fs.rmSync(`./data/${dir}`, { recursive: true });
+      return res.status(202).json("Success");
+    } catch {
+      return res.status(200).json({ message: "No Existing Directory" });
+    }
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ message: err?.message });

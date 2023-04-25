@@ -9,10 +9,14 @@ router.get("/:file", (req: Request<ClusterReqParams>, res) => {
     const { dir, file } = req.params;
     if (typeof dir !== "string" || typeof file !== "string")
       return res.status(400).json("Invalid Path");
-    const rawData = fs.readFileSync(`./data/${dir}/${file}.json`, {
-      encoding: "utf-8",
-    });
-    return res.status(200).json(JSON.parse(rawData));
+    try {
+      const rawData = fs.readFileSync(`./data/${dir}/${file}.json`, {
+        encoding: "utf-8",
+      });
+      return res.status(200).json(JSON.parse(rawData));
+    } catch {
+      return res.status(200).json(null);
+    }
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ message: err?.message });
@@ -39,8 +43,12 @@ router.delete("/:file", (req: Request<ClusterReqParams>, res) => {
     const { dir, file } = req.params;
     if (typeof dir !== "string" || typeof file !== "string")
       return res.status(400).json("Invalid Path");
-    fs.rmSync(`./data/${dir}/${file}.json`);
-    res.status(202).json("success");
+    try {
+      fs.rmSync(`./data/${dir}/${file}.json`);
+      res.status(202).json("success");
+    } catch {
+      return res.status(200).json({ message: "No Existing File" });
+    }
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ message: err?.message });
