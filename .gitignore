@@ -1,2 +1,4 @@
 node_modules
 .rest
+data/*
+!data/404

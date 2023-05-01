@@ -39,7 +39,7 @@ router.post("/:document", (req: Request<DocumentReqParams>, res) => {
     fs.writeFileSync(`./data/${dir}/${file}.json`, JSON.stringify(parsedData), {
       encoding: "utf-8",
     });
-    res.status(201).json(parsedData);
+    res.status(201).json({ id, ...data });
   } catch (err: any) {
     console.error(err);
     return res.status(500).json({ message: err.message });
